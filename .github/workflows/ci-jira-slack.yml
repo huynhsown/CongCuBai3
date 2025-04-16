@@ -1,4 +1,3 @@
-```yaml
 name: CI with Jira and Slack Integration
 
 on:
@@ -99,4 +98,3 @@ jobs:
           slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel-id: 'C08NGHX07GS' # Replace with your #cicd-notifications channel ID
           text: 'Jira issue ${{ steps.extract-jira.outputs.issue_key }} has been closed successfully!'
-```
