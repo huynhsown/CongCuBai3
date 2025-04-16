@@ -45,9 +45,9 @@ jobs:
         if: steps.extract-jira.outputs.issue_key
         uses: atlassian/gajira-login@v3
         env:
-          JIRA_BASE_URL: "https://sondanghuynh-1744373051968.atlassian.net"
-          JIRA_USER_EMAIL: "sondanghuynh@gmail.com"
-          JIRA_API_TOKEN: "ATATT3xFfGF0Ki433J3MN4rYm6wuUCoxBIN00gQ8j3MklIpXvF7XTsQQ6g9L__BV4LUUQGxAVHJ3NTV9yw-8W80Lylkz2Ivu3NmxVQO2n6s6gmtAVye_O4hyWn8_g7FgNGE_Q3bfNCNanPT3eSX5mvrJwA4Hp-XWlJc4OQ55s0n67kGDW-f3yP4=67394863"
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
       - name: Transition Jira issue
         if: steps.extract-jira.outputs.issue_key
         uses: atlassian/gajira-transition@v3
@@ -76,7 +76,8 @@ jobs:
       - name: Send Slack notification
         if: steps.extract-jira.outputs.issue_key
         uses: slackapi/slack-github-action@v1.27.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
-          slack-bot-token: ${{ SLACK_BOT_TOKEN }}
-          channel-id: 'C12345678' # Replace with your #cicd-notifications channel ID
-          text: 'Jira issue ${{ steps.extract-jira.outputs.issue_key }} has been closed successfully!'
+          channel-id: 'C12345678' # Thay bằng Channel ID thực tế của #cicd-notifications
+          slack-message: 'Jira issue ${{ steps.extract-jira.outputs.issue_key }} has been closed successfully!'
