@@ -10,36 +10,28 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      # Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      # Setup Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      # Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      # Run tests with pytest
+      - name: Check tests directory
+        run: ls -la tests/ || echo "Tests directory not found"
       - name: Run tests
-        run: pytest tests/
+        run: pytest tests/ --verbose
 
   update-jira:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     steps:
-      # Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      # Extract Jira issue key
       - name: Extract Jira issue key
         id: extract-jira
         run: |
@@ -49,18 +41,13 @@ jobs:
             exit 0
           fi
           echo "issue_key=$ISSUE_KEY" >> $GITHUB_OUTPUT
-
-      # Login to Jira
       - name: Login to Jira
         if: steps.extract-jira.outputs.issue_key
         uses: atlassian/gajira-login@v3
-        with:
-          username: ${{ secrets.JIRA_USERNAME }}
-          password: ${{ secrets.JIRA_API_TOKEN }}
         env:
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-
-      # Transition Jira issue to Done
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
       - name: Transition Jira issue
         if: steps.extract-jira.outputs.issue_key
         uses: atlassian/gajira-transition@v3
@@ -75,11 +62,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     steps:
-      # Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      # Extract Jira issue key
       - name: Extract Jira issue key
         id: extract-jira
         run: |
@@ -89,12 +73,10 @@ jobs:
             exit 0
           fi
           echo "issue_key=$ISSUE_KEY" >> $GITHUB_OUTPUT
-
-      # Send Slack notification
       - name: Send Slack notification
         if: steps.extract-jira.outputs.issue_key
         uses: slackapi/slack-github-action@v1.27.0
         with:
           slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
-          channel-id: 'C08NGHX07GS' # Replace with your #cicd-notifications channel ID
+          channel-id: 'C12345678' # Replace with your #cicd-notifications channel ID
           text: 'Jira issue ${{ steps.extract-jira.outputs.issue_key }} has been closed successfully!'
