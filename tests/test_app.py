@@ -10,7 +10,5 @@ def test_home():
 def test_about():
     assert True
 
-def test_contact():
-    assert True
-def test_services():
+def test_sleep():
     assert True
