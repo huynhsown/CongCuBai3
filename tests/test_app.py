@@ -12,3 +12,6 @@ def test_about():
 
 def test_sleep():
     assert True
+
+def test_lamo():
+    assert True
