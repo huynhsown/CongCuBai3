@@ -77,6 +77,6 @@ jobs:
         if: steps.extract-jira.outputs.issue_key
         uses: slackapi/slack-github-action@v1.27.0
         with:
-          slack-bot-token: ${{ CICD.SLACK_BOT_TOKEN }}
+          slack-bot-token: ${{ SLACK_BOT_TOKEN }}
           channel-id: 'C12345678' # Replace with your #cicd-notifications channel ID
           text: 'Jira issue ${{ steps.extract-jira.outputs.issue_key }} has been closed successfully!'
