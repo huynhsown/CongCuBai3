@@ -9,3 +9,8 @@ def test_home():
     assert True
 def test_about():
     assert True
+
+def test_contact():
+    assert True
+def test_services():
+    assert True
