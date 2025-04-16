@@ -79,5 +79,5 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
-          channel-id: 'C12345678' # Thay bằng Channel ID thực tế của #cicd-notifications
+          channel-id: 'C08NGHX07GS' # Thay bằng Channel ID thực tế của #cicd-notifications
           slack-message: 'Jira issue ${{ steps.extract-jira.outputs.issue_key }} has been closed successfully!'
