@@ -4,3 +4,8 @@ def test_example():
 # Đúng
 def test_example():
     assert True
+
+def test_home():
+    assert True
+def test_about():
+    assert True
